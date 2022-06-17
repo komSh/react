@@ -1,19 +1,35 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Counter from "./Counter";
+import { getUser } from "./redux/ducks/user";
+import "./styles.css";
 
-import './App.css';
-import { useSelector ,useDispatch } from 'react-redux';
-import {increment,decrement } from './action' 
-
-function App() {
+export default function App() {
   const dispatch = useDispatch();
-  const counter = useSelector(state => state.counter);
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
+
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
+
+  const count = useSelector((state) => state.counter.count);
+  console.log(count);
+  const voters = [
+    "Anthony Sistilli ",
+    "Bob Smith",
+    "Stephanie Foo",
+    "Kevin Ma"
+  ];
   return (
     <div className="App">
-      <h1>Counter {counter}</h1>
-      <button  onClick={() => dispatch(increment())}>+</button>
-      <button  onClick={() => dispatch(decrement())}>-</button>
-       
+      {user && <h1> Hello, {user.firstName} </h1>}
+      <h1>Redux made easy</h1>
+      <h2> Total Votes: {count}</h2>
+      {voters.map((voter) => (
+        <Counter name={voter} />
+      ))}
     </div>
   );
 }
-
-export default App;
